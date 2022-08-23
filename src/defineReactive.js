@@ -15,7 +15,7 @@ function defineReactive(target, key, val) {
       // 当值被改变时，先对比新值和旧值
       if (newV === val) return // 相等则什么也不做
       val = newV // 不相等更新旧值
-      observe(val) // 对新值做响应式处理
+      observe(val) // 对新值(根属性的属性，更新为新值)做响应式处理
     }
   })
 }
@@ -23,6 +23,7 @@ function defineReactive(target, key, val) {
 function Observer(value) {
   if (Array.isArray(value)) {
     // 数组响应式
+    value.__proto__ = arrayMethods
   } else {
     // 对象响应式
     this.walk(value)
@@ -37,7 +38,6 @@ Observer.prototype.walk = function (obj) {
 // 仅仅调用 Observe ，层级更深的对象属性无法变为响应式
 function observe(value) {
   // 当值不为对象时停止调用
-  console.log(typeof value)
   if (typeof value !== 'object') return
   const ob = new Observer(value)
   return obj
@@ -46,6 +46,34 @@ function observe(value) {
 function set(target, key, value) {
   defineReactive(target, key, value)
 }
+
+/**
+ * 数组响应式
+ */
+const arrayProto = Array.prototype
+const arrayMethods = Object.create(arrayProto) // Object.create方法用于创建新对象，使用现有的对象作为新创建对象的原型
+const methodsToPatch = [
+  'push',
+  'pop',
+  'unshift',
+  'shift',
+  'splice',
+  'sort',
+  'reverse'
+] // 这七个数组方法会改变数组本身，所以拿这七个方法做数组响应式
+methodsToPatch.forEach((method) => {
+  // push
+  Object.defineProperty(arrayMethods, method, {
+    value: function (...args) {
+      const ret = arrayProto[method].apply(this, args)
+      console.log('array reactive')
+      return ret
+    },
+    configurable: true,
+    writable: true,
+    enumerable: false
+  })
+})
 
 const obj = {
   t: 't value',
