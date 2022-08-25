@@ -15,7 +15,7 @@ export default function defineReactive(target, key, val) {
     get() {
       // 触发getter后开始收集依赖
       if (Dep.target) {
-        dep.depend()
+        dep.depend() // 如果存在Dep.target(不是null),就把Dep.target 给 push 到 Dep.watchers 数组里去 完成依赖收集
         // 如果存在子 ob, 则把子对象的依赖收集也完成
         if (childOb) {
           childOb.dep.depend() // Observer.js里给对象挂了个dep实例 value.__ob__.dep = new Dep()

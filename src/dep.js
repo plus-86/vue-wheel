@@ -7,7 +7,7 @@ Dep.target = null
 
 // 依赖收集方法depend, 由它负责依赖收集
 Dep.prototype.depend = function () {
-  this.watchers.push(Dep.target)
+  this.watchers.push(Dep.target) // Dep.target是Watcher实例
 }
 
 // 依赖通知

@@ -15,7 +15,7 @@ export default function initData(vm) {
     // 方式声明
     _data = vm._data = typeof data === 'function' ? data() : data
   }
-  // 数据代理,实现通过this.xx访问数据
+  // 数据代理,挂载到vue实例上,实现通过this.xx访问数据
   for (let key in _data) {
     proxy(vm, '_data', key)
   }

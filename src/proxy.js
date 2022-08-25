@@ -1,4 +1,5 @@
 // target: Vue实例 sourceKey:被代理对象 key:被代理对象的属性
+// 给Vue实例上挂载代理数据
 export default function proxy(target, sourceKey, key) {
   Object.defineProperty(target, key, {
     get() {
