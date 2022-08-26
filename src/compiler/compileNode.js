@@ -9,9 +9,9 @@ export default function compileNode(nodes, vm) {
       // 递归，编译节点上的各个属性，比如v-bind、v-model、v-on:click
       compileNode(Array.from(node.childNodes), vm)
     } else if (node.nodeType === 3 && node.textContent.match(/{{(.*)}}/)) {
-      // 当nodeType为3表示 文本节点
+      // 当nodeType为3表示文本节点，node.textContent 将文本内容拿来做 模板语法的匹配
       // 当前为文本节点，比如  <span>{{ key }}</span>
-      compileTextNode(node, vm)
+      compileTextNode(node, vm) // 编译模板语法
     }
   }
 }
